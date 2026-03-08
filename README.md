@@ -25,9 +25,7 @@ No root access required. Everything is installed in your home directory.
 ```bash
 git clone https://github.com/fvrlak/gnome-taskbar-separator
 cd gnome-taskbar-separator
-chmod +x taskbar-separator
-mkdir -p ~/.local/bin
-ln -s "$(pwd)/taskbar-separator" ~/.local/bin/taskbar-separator
+./install.sh
 ```
 
 Make sure `~/.local/bin` is in your PATH. Add this to your `~/.bashrc` if needed:
@@ -80,8 +78,15 @@ You can add as many separators as you need — each one gets a unique name (`tas
 
 ```bash
 taskbar-separator remove   # repeat until all separators are gone
-rm ~/.local/bin/taskbar-separator
-rm ~/.local/share/icons/taskbar-separator.png
+./install.sh --uninstall
+rm -f ~/.local/share/icons/taskbar-separator.png
+```
+
+If `taskbar-separator` is "command not found", rerun install:
+
+```bash
+cd /home/fvrlak/Videos/gnome-taskbar-separator
+./install.sh
 ```
 
 ## License

@@ -4,7 +4,7 @@ gnome-taskbar-separator - Add visual separators to the GNOME taskbar
 https://github.com/fvrlak/gnome-taskbar-separator
 """
 
-import os
+import ast
 import sys
 import subprocess
 from pathlib import Path
@@ -37,15 +37,31 @@ def get_favorites():
         ['gsettings', 'get', 'org.gnome.shell', 'favorite-apps'],
         capture_output=True, text=True
     )
+    if result.returncode != 0:
+        err = (result.stderr or "gsettings command failed").strip()
+        print(f"Error: cannot read favorite apps from gsettings: {err}", file=sys.stderr)
+        return []
     raw = result.stdout.strip()
-    # Parse GVariant string array
-    apps = [s.strip().strip("'") for s in raw.strip("[]").split(",")]
-    return [a for a in apps if a]
+    # Parse GVariant string array like "['app1.desktop', 'app2.desktop']"
+    if not raw:
+        return []
+    try:
+        parsed = ast.literal_eval(raw)
+    except (ValueError, SyntaxError):
+        apps = [s.strip().strip("'") for s in raw.strip("[]").split(",")]
+        return [a for a in apps if a]
+    if not isinstance(parsed, list):
+        return []
+    return [a for a in parsed if a]
 
 
 def set_favorites(apps):
     formatted = "[" + ", ".join(f"'{app}'" for app in apps) + "]"
-    subprocess.run(['gsettings', 'set', 'org.gnome.shell', 'favorite-apps', formatted])
+    result = subprocess.run(['gsettings', 'set', 'org.gnome.shell', 'favorite-apps', formatted], capture_output=True, text=True)
+    if result.returncode != 0:
+        err = (result.stderr or "gsettings command failed").strip()
+        print(f"Error: cannot write favorite apps to gsettings: {err}", file=sys.stderr)
+        sys.exit(1)
 
 
 def next_separator_name():
