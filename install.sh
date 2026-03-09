@@ -15,7 +15,7 @@ EOF
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="${HOME}/.local/bin"
 TARGET="${BIN_DIR}/taskbar-separator"
-SOURCE="${SCRIPT_DIR}/taskbar-separator"
+SOURCE="${SCRIPT_DIR}/taskbar-separator.py"
 
 install() {
   mkdir -p "${BIN_DIR}"
