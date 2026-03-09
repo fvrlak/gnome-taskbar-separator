@@ -45,10 +45,11 @@ source ~/.bashrc
 ### Add a separator
 
 ```bash
-taskbar-separator add
+taskbar-separator add [--horizontal|-H]
 ```
 
-Adds a new separator to the end of the taskbar. Drag it to reposition between your app groups.
+Adds a new vertical separator to the end of the taskbar. Drag it to reposition between your app groups.
+Use `--horizontal` or `-H` for a horizontal line instead.
 
 ### Remove the last separator
 
